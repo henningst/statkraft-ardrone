@@ -21,7 +21,7 @@ var sendTestData = function() {
 	raw_data_header = {
 		header: {
 			time: new Date()
-			, flying: 0
+			, flying: 1
 			, sequenceNumber: counter
 			, batteryMilliVolt: Math.round(Math.random()*100)
 			, altitude: Math.round(Math.random()*10)

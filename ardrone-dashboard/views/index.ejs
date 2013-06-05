@@ -15,6 +15,13 @@
 		<script src="/js/bootstrapSwitch.min.js"></script>	
 		<script>
 
+			var executeTakeOff = function() {
+				$.ajax('api/takeoff', function () {
+					console.log('Took off?');
+				});
+			};
+
+
 			var flying = io.connect('http://localhost/flying');
 
 			flying.on('connect', function(){
@@ -325,7 +332,7 @@
 				</div>
 			</div>
 			<div class="row-fluid" style="text-align: center; margin-top: 50px;">
-				<div class="btn btn-large btn-success" style="width: 150px; height: 60px;"><h1>Take off!</h1></div>
+				<div class="btn btn-large btn-success" onclick="executeTakeOff()" style="width: 150px; height: 60px;"><h1>Take off!</h1></div>
 			</div>
 		</div>
 	</body>
