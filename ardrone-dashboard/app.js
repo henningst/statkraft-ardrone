@@ -17,7 +17,8 @@ var express = require('express')
 	, battery
 	, header
 	, takeOff
-	, gate_counter;
+	, gate_counter
+	, droneController = require('./ardrone-controller');
 
 var app = express();
 var MongoStore = require('connect-mongo')(express); // persistent sessions
@@ -49,7 +50,7 @@ function setupRoutes(){
 
 
 	app.post('/api/raw', /*passTheGate,*/ addDb, addAltitude, addSpeed, addFlying, /*addHeading, addThrottleVertical, addThrottleHorizontal, addBattery,*/ routes.raw);
-	app.get('/api/takeoff', doTakeOff);
+	app.post('/api/takeoff', doTakeOff, routes.raw);
 	/*app.post('/api/altitude', addAltitude, routes.altitude);
 	app.post('/api/speed', addSpeed, routes.speed);
 	app.post('/api/heading', addHeading, routes.heading);
@@ -71,24 +72,9 @@ function passTheGate(req, res, next){
 	}
 }*/
 
-function doTakeOff() {
-	/*var arDrone = require('ar-drone');
-	var client = arDrone.createClient();
-
-	client.takeoff();
-
-	client
-	  .after(5000, function() {
-	    this.clockwise(0.5);
-	  })
-	  .after(3000, function() {
-	    this.animate('flipLeft', 15);
-	  })
-	  .after(1000, function() {
-	    this.stop();
-	    this.land();
-	  });*/
-	console.log('Taking off!!');
+function doTakeOff(req, res, next) {
+	droneController.takeoff();
+	next();
 }
 
 function addDb(req, res, next){

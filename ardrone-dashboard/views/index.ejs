@@ -16,7 +16,7 @@
 		<script>
 
 			var executeTakeOff = function() {
-				$.ajax('api/takeoff', function () {
+				$.post('api/takeoff', function () {
 					console.log('Took off?');
 				});
 			};
