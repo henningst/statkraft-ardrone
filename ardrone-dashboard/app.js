@@ -48,29 +48,14 @@ function setupApp(){
 function setupRoutes(){
 	app.get('/', routes.index);
 
-
 	app.post('/api/raw', /*passTheGate,*/ addDb, addAltitude, addSpeed, addFlying, /*addHeading, addThrottleVertical, addThrottleHorizontal, addBattery,*/ routes.raw);
 	app.post('/api/takeoff', doTakeOff, routes.raw);
-	/*app.post('/api/altitude', addAltitude, routes.altitude);
-	app.post('/api/speed', addSpeed, routes.speed);
-	app.post('/api/heading', addHeading, routes.heading);
-	app.post('/api/throttle', addThrottleVertical, routes.throttle);*/
 
 	app.get('*', function(req, res){
 		console.log("Page not found: " + req.originalUrl);
 		res.render('404');
 	});
 }
-
-/*
-function passTheGate(req, res, next){
-	console.log("Gate: " + gate_counter);
-	gate_counter = gate_counter + 1;
-	if(gate_counter > 10){
-		gate_counter = 0;
-		next();
-	}
-}*/
 
 function doTakeOff(req, res, next) {
 	droneController.takeoff();
@@ -98,27 +83,6 @@ function addSpeed(req, res, next){
 	req.speed = speed;
 	next();
 }
-
-/*
-function addHeading(req, res, next){
-	req.heading = heading;
-	next();
-}
-
-function addThrottleVertical(req, res, next){
-	req.throttle_vertical = throttle_vertical;
-	next();
-}
-
-function addThrottleHorizontal(req, res, next){
-	req.throttle_horizontal = throttle_horizontal;
-	next();
-}
-
-function addBattery(req, res, next){
-	req.battery = battery;
-	next();
-}*/
 
 function addSocketIO(req, res, next){
 	next();
