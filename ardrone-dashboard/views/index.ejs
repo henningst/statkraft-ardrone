@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Real-Time Dashboard</title>
+		<link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
+		<link rel='stylesheet' href='/css/bootstrapSwitch.css' />
+		<link rel="stylesheet" href="/css/rickshaw.min.css"/>
+		<script src="/js/jquery-1.9.1.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+
+		<script src="/js/highcharts.js"></script>
+		<script src="/js/highcharts-more.js"></script>
+		<script src="/js/exporting.js"></script>	
+		<script src="/js/bootstrapSwitch.min.js"></script>	
+		<script>
+
+			var flying = io.connect('http://localhost/flying');
+
+			flying.on('connect', function(){
+				console.log("Connected to the flying data stream.");
+				flying.emit("Connected to the flying data stream.");
+			});
+
+			flying.on('flying', function(data){
+				console.dir(data);
+				console.log("Getting flying " + data);
+				$('#flying').bootstrapSwitch('setState', data.value);
+			});
+
+			var speed = io.connect('http://localhost/speed');
+			var speed_data = new Array();
+			var speed_graph;
+			var counter = 0;
+			speed.on('connect', function(){
+				console.log("Connected to the speed data stream.");
+				speed.emit("Connected to the speed data stream.");
+			});
+
+			speed.on('speed', function(data){
+				console.log("Getting speed");
+				$("#speedx").text(Math.round(data.value.x*10));
+				$("#speedy").text(Math.round(data.value.y*10));
+				$("#speedz").text(Math.round(data.value.z*10));
+
+				speed_data.push({x: (new Date()).getTime(), y: Math.abs(parseInt(data.value.z))});
+
+
+					
+		        var point = speed_chart.series[0].points[0];
+		        point.update(data.value.x);
+					        
+
+				/*
+				if(!speed_graph){
+					//console.log("Altitude graph doesn't yet exist, drawing it for the first and only time.");
+					speed_graph = new Rickshaw.Graph( {
+					    element: document.querySelector("#speed_chart"), 
+					    width: 80, 
+					    renderer: 'line',
+					    height: 60, 
+					    series: [{
+					        color: 'steelblue',
+					        data: speed_data
+					    }]
+					});
+					speed_graph.render();
+				}else{
+					//console.log("Altitude graph already exists.");
+					speed_graph.series[0].data = speed_data;
+					speed_graph.render();
+				}*/
+			});
+
+
+
+			var altitude = io.connect('http://localhost/altitude');
+			var altitude_data = new Array();
+			var altitude_chart;
+
+			altitude.on('connect', function(){
+				console.log("Connected to the altitude data stream.");
+				altitude.emit("Connected to the altitude data stream.");
+			});
+
+			altitude.on('altitude', function(data){
+				console.log("Getting altitude");
+
+				$("#altitude").text(data.value);
+
+				//altitude_data.push();
+				altitude_chart.series[0].addPoint([(new Date()).getTime(), parseInt(data.value)], true, true, false);
+
+				
+				//altitude_chart.series[0].update();
+				/*
+				if(!altitude_graph){
+					//console.log("Altitude graph doesn't yet exist, drawing it for the first and only time.");
+					altitude_graph = new Rickshaw.Graph( {
+					    element: document.querySelector("#altitude_chart"), 
+					    width: 80, 
+					    renderer: 'line',
+					    height: 60, 
+					    series: [{
+					        color: 'steelblue',
+					        data: altitude_data
+					    }]
+					});
+					altitude_graph.render();
+				}else{
+					//console.log("Altitude graph already exists.");
+					altitude_graph.series[0].data = altitude_data;
+					altitude_graph.render();
+				}*/
+			});
+
+			$(function () {
+				
+			    speed_chart = new Highcharts.Chart({
+				
+				    chart: {
+				    	renderTo: 'speed_gauge',
+				        type: 'gauge',
+				        plotBackgroundColor: null,
+				        plotBackgroundImage: null,
+				        plotBorderWidth: 0,
+				        plotShadow: false
+				    },
+				    
+				    title: {
+				        text: 'Speedometer'
+				    },
+				    
+				    pane: {
+				        startAngle: -150,
+				        endAngle: 150,
+				        background: [{
+				            backgroundColor: {
+				                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+				                stops: [
+				                    [0, '#FFF'],
+				                    [1, '#333']
+				                ]
+				            },
+				            borderWidth: 0,
+				            outerRadius: '109%'
+				        }, {
+				            backgroundColor: {
+				                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+				                stops: [
+				                    [0, '#333'],
+				                    [1, '#FFF']
+				                ]
+				            },
+				            borderWidth: 1,
+				            outerRadius: '107%'
+				        }, {
+				            // default background
+				        }, {
+				            backgroundColor: '#DDD',
+				            borderWidth: 0,
+				            outerRadius: '105%',
+				            innerRadius: '103%'
+				        }]
+				    },
+				       
+				    // the value axis
+				    yAxis: {
+				        min: 0,
+				        max: 200,
+				        
+				        minorTickInterval: 'auto',
+				        minorTickWidth: 1,
+				        minorTickLength: 10,
+				        minorTickPosition: 'inside',
+				        minorTickColor: '#666',
+				
+				        tickPixelInterval: 30,
+				        tickWidth: 2,
+				        tickPosition: 'inside',
+				        tickLength: 10,
+				        tickColor: '#666',
+				        labels: {
+				            step: 2,
+				            rotation: 'auto'
+				        },
+				        title: {
+				            text: 'km/h'
+				        },
+				        plotBands: [{
+				            from: 0,
+				            to: 120,
+				            color: '#55BF3B' // green
+				        }, {
+				            from: 120,
+				            to: 160,
+				            color: '#DDDF0D' // yellow
+				        }, {
+				            from: 160,
+				            to: 200,
+				            color: '#DF5353' // red
+				        }]        
+				    },
+				
+				    series: [{
+				        name: 'Speed',
+				        data: [0],
+				        tooltip: {
+				            valueSuffix: ' km/h'
+				        }
+				    }],
+		            exporting: {
+		                enabled: false
+		            }
+
+				
+				} 
+				);
+
+
+				Highcharts.setOptions({
+					global : {
+						useUTC : false
+					}
+				});
+		
+	 			altitude_chart = new Highcharts.Chart({
+ 				plotOptions: {
+ 					series: {
+ 						animation: false
+ 					},
+ 					line: {
+ 						animation: false
+ 					},
+ 					area: {
+ 						marker: {
+ 							enabled: false
+ 						}
+ 					}
+ 				},
+	            chart: {
+	            	renderTo: 'altitude_chart',
+	                type: 'area',
+	                animation: Highcharts.svg, // don't animate in old IE
+	                marginRight: 10
+	            },
+	            title: {
+	                text: 'Altitude'
+	            },
+	            xAxis: {
+	                type: 'datetime',
+	                tickPixelInterval: 150
+	            },
+	            yAxis: {
+	            	minRange: 0,
+	                title: {
+	                    text: 'Meters'
+	                },
+	                plotLines: [{
+	                    value: 0,
+	                    width: 1,
+	                    color: '#808080'
+	                }]
+	            },
+	            tooltip: {
+	                formatter: function() {
+	                        return '<b>'+ this.series.name +'</b><br/>'+
+	                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+
+	                        Highcharts.numberFormat(this.y, 2);
+	                }
+	            },
+	            legend: {
+	                enabled: false
+	            },
+	            exporting: {
+	                enabled: false
+	            },
+	            series: [{
+	                name: 'Random data',
+		             data: (function() {
+		                    // generate an array of random data
+		                    var data = [],
+		                        time = (new Date()).getTime(),
+		                        i;
+		    
+		                    for (i = -19; i <= 0; i++) {
+		                        data.push({
+		                            x: time + i * 1000,
+		                            y: 0
+		                        });
+		                    }
+		                    return data;
+		                })()	            }]
+	        });
+
+		});
+
+
+		</script>
+	</head>
+	<body>
+		<div class="container-fluid" style="width:100%">			
+			<div class="row-fluid">
+				<div class="span4">						
+					<div id="altitude_chart">
+					</div>
+				</div>
+				<div class="span4">									
+					<div id="speed_gauge">
+					</div>
+				</div>
+				<div class="span4">									
+					<div id="video_feed">
+						<h3>Video</h3>
+						<img class="img-polaroid" alt="Video stream" style="width: 150px; height: 150px">
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span4">
+					<span style="font-size: 20px; padding-right: 10px;">Are we flying?</span>
+					<div id="flying" class="switch switch-large" data-on-label="Yes" data-off-label="No" data-on="success" data-off="danger">
+						<input type="checkbox" />
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid" style="text-align: center; margin-top: 50px;">
+				<div class="btn btn-large btn-success" style="width: 150px; height: 60px;"><h1>Take off!</h1></div>
+			</div>
+		</div>
+	</body>
+</html>
