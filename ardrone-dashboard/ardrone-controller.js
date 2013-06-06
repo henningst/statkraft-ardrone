@@ -24,10 +24,6 @@ var ArDroneClient = function() {
 		  });
 	}
 
-	var logData = function(data) {
-		console.log('logging');		
-	}
-
 	return {
 		takeoff: function() { 
 			executeFlightProgram();
@@ -51,17 +47,3 @@ exports.takeoff = function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
