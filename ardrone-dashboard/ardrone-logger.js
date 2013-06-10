@@ -12,7 +12,6 @@ var logData = function(data) {
 	if(counter > 100){
 		counter = 0;
 		var raw_data_header = new Object();
-		console.dir(data);
 		if(data.rawMeasures && data.demo && data.pwm){
 
 			raw_data_header = {
@@ -64,7 +63,7 @@ var logData = function(data) {
 		  });
 
 		  response.on('end', function () {
-		    console.log(str);
+		    //console.log(str);
 		  });
 		}
 
@@ -77,7 +76,7 @@ var logData = function(data) {
 		requestCounter++;
 		
 		var req = http.request(options, callback);
-		console.log("Sending data... (" + requestCounter + ")");
+		console.log("Received live flight data... (" + requestCounter + ")");
 
 		//This is the data we are posting, it needs to be a string or a buffer
 		req.write(data_to_be_sent);

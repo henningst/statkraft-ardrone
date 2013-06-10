@@ -4,18 +4,20 @@ var speed_graph;
 $(function () {
 	
     speed_chart = new Highcharts.Chart({
-	
+		credits: {
+			enabled: false
+		},
 	    chart: {
 	    	renderTo: 'speed_gauge',
 	        type: 'gauge',
 	        plotBackgroundColor: null,
 	        plotBackgroundImage: null,
 	        plotBorderWidth: 0,
-	        plotShadow: false
+	        plotShadow: false,
 	    },
 	    
 	    title: {
-	        text: 'Speedometer'
+	        text: 'Speed'
 	    },
 	    
 	    pane: {
@@ -99,9 +101,7 @@ $(function () {
         exporting: {
             enabled: false
         }
-
-	
-	} 
+  	  } 
 	);
 
 
@@ -109,9 +109,14 @@ $(function () {
 		global : {
 			useUTC : false
 		}
+
 	});
 
 		altitude_chart = new Highcharts.Chart({
+			credits: {
+				enabled: false
+			},
+		
 		plotOptions: {
 			series: {
 				animation: false

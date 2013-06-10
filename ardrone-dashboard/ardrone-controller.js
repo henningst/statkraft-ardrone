@@ -4,13 +4,13 @@ var ArDroneClient = function() {
 	var logger = require('./ardrone-logger');
 	
 	var client = arDrone.createClient();
-	var ardroneModule = require('./ardrone-module');
+	var flightProgram = require('./ardrone-flightProgram');
 
 	client.config('general:navdata_demo', 'FALSE'); // get all the data
 	client.on('navdata', logger.logData);
 
 	var executeFlightProgram = function() {
-		ardroneModule.blabla(client);
+		flightProgram.execute(client);
 	}
 
 	return {

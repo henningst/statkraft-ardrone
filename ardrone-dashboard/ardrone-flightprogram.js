@@ -1,4 +1,4 @@
-exports.blabla = function(client) {
+exports.execute = function(client) {
 
 		console.log('Executing flight program');
 

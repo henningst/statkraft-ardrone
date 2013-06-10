@@ -5,10 +5,10 @@ exports.index = function(req, res){
 };
 
 exports.raw = function(req, res){
-	console.log("In /api/raw");
-	console.dir(req.body);
 	if(req.body.header){
-		console.dir(req.body.header);
+
+		//console.dir(req);
+		console.log("Received message ("+req.body.header.sequenceNumber+")");
 
 		var header = new Object();
 		header.rawData = req.body.header;

@@ -12,8 +12,7 @@ var options = {
 
 var counter = 0;
 
-
-
+// Post test data to the server using an HTTP POST
 var sendTestData = function() {
 	counter++;
 	var raw_data_header = new Object();
@@ -64,4 +63,5 @@ var sendTestData = function() {
 
 };
 
+// Call sendTestData every 1 second
 setInterval(sendTestData, 1000);
