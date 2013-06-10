@@ -34,7 +34,7 @@
 		<link rel='stylesheet' href='/bootstrap/css/bootstrap-responsive.min.css' />
 		<script>
 
-			var ArDroneModule = function() {
+			var AltitudeReader = function() {
 				var altitude = function() {
 					var altitude = io.connect('http://localhost/altitude');
 					var altitude_data = new Array();
@@ -49,7 +49,9 @@
 						altitude_chart.series[0].addPoint([(new Date()).getTime(), parseInt(data.value)], true, true, false);
 					});
 				};
+			}
 
+			var ArDroneModule = function() {
 				var speed = function() {
 					var speed = io.connect('http://localhost/speed');
 					var speed_data = new Array();
