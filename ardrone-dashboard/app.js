@@ -58,6 +58,7 @@ function setupRoutes(){
 }
 
 function doTakeOff(req, res, next) {
+	console.log("Received take off command!")
 	droneController.takeoff();
 	next();
 }

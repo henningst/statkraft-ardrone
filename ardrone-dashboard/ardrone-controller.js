@@ -2,26 +2,15 @@
 var ArDroneClient = function() {
 	var arDrone = require('ar-drone');
 	var logger = require('./ardrone-logger');
+	
 	var client = arDrone.createClient();
+	var ardroneModule = require('./ardrone-module');
 
 	client.config('general:navdata_demo', 'FALSE'); // get all the data
 	client.on('navdata', logger.logData);
 
 	var executeFlightProgram = function() {
-		console.log('Executing flight program');
-		client.animateLeds('blinkGreenRed', 5, 10);
-		client.takeoff();
-		client
-		  //.after(5000, function() {
-		  //  this.clockwise(0.5);
-		  //})
-		  //.after(3000, function() {
-		  //  this.animate('flipLeft', 15);
-		  //})
-		  .after(5000, function() {
-		    this.stop();
-		    this.land();
-		  });
+		ardroneModule.blabla(client);
 	}
 
 	return {

@@ -21,7 +21,7 @@ var sendTestData = function() {
 	raw_data_header = {
 		header: {
 			time: new Date()
-			, flying: 1
+			, flying: Math.round(Math.random()*1)
 			, sequenceNumber: counter
 			, batteryMilliVolt: Math.round(Math.random()*100)
 			, altitude: Math.round(Math.random()*10)
@@ -64,4 +64,4 @@ var sendTestData = function() {
 
 };
 
-setInterval(sendTestData, 100);
+setInterval(sendTestData, 1000);
